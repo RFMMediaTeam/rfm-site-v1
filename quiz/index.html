@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bible Quiz — Raja Faith Ministries</title>
+<meta name="description" content="1,000+ Bible questions to grow in the Word. Track your progress, resume anytime." />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">✦</span>
+    <div>
+      <div class="brand-title">Bible Quiz</div>
+      <div class="brand-sub">Raja Faith Ministries</div>
+    </div>
+  </div>
+  <nav class="nav" id="nav" hidden>
+    <button class="nav-btn" data-view="home">Home</button>
+    <button class="nav-btn" data-view="quiz">Quiz</button>
+    <button class="nav-btn" data-view="history">History</button>
+    <button class="nav-btn" data-view="settings">Settings</button>
+  </nav>
+</header>
+
+<main id="app">
+
+<!-- ─────────── WELCOME / LOGIN ─────────── -->
+<section class="view" id="view-welcome">
+  <div class="card center">
+    <h1>Know the Word. Grow in Faith.</h1>
+    <p class="lead">Over 1,000 questions from Genesis to Revelation. Answer at your own pace — your progress is saved on this device so you can pick up where you left off.</p>
+    <div class="form">
+      <label>Your name</label>
+      <input type="text" id="input-name" placeholder="e.g. Priya" maxlength="40" />
+      <label>Optional: a short passphrase (helps recover your data)</label>
+      <input type="text" id="input-passphrase" placeholder="Anything memorable" maxlength="40" />
+      <button class="btn btn-primary" id="btn-start">Begin Quiz</button>
+      <p class="hint">Already used this site before? Enter the same name and passphrase to keep your history.</p>
+      <details class="import-block">
+        <summary>Have a backup file from another device?</summary>
+        <input type="file" id="import-file" accept=".json" />
+        <button class="btn btn-ghost" id="btn-import">Import progress</button>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── HOME (dashboard) ─────────── -->
+<section class="view" id="view-home" hidden>
+  <div class="card">
+    <h2>Welcome back, <span id="greeting-name">friend</span> 🌿</h2>
+    <p class="lead" id="home-lead">Ready to grow in the Word today?</p>
+
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-num" id="stat-answered">0</div>
+        <div class="stat-lbl">Answered</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-lbl">Total</div>
+      </div>
+      <div class="stat stat-good">
+        <div class="stat-num" id="stat-correct">0</div>
+        <div class="stat-lbl">Correct</div>
+      </div>
+      <div class="stat stat-warn">
+        <div class="stat-num" id="stat-wrong">0</div>
+        <div class="stat-lbl">Missed</div>
+      </div>
+      <div class="stat stat-accent">
+        <div class="stat-num" id="stat-accuracy">–</div>
+        <div class="stat-lbl">Accuracy</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="stat-streak">0</div>
+        <div class="stat-lbl">Streak 🔥</div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-lbl" id="progress-lbl">0%</div>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn btn-primary" id="btn-continue">Continue where I left off</button>
+      <button class="btn btn-ghost" id="btn-shuffle">Random question</button>
+    </div>
+
+    <div class="section-title">Verse of the moment</div>
+    <blockquote class="verse" id="verse-moment">“Your word is a lamp to my feet and a light to my path.” — Psalm 119:105</blockquote>
+  </div>
+</section>
+
+<!-- ─────────── QUIZ ─────────── -->
+<section class="view" id="view-quiz" hidden>
+  <div class="card quiz-card" id="quiz-card">
+    <div class="quiz-meta">
+      <span id="quiz-position">Question 1 of 1171</span>
+      <span id="quiz-mode-badge" class="badge">Sequential</span>
+    </div>
+
+    <h2 class="quiz-question" id="quiz-question">Loading…</h2>
+
+    <div class="options" id="quiz-options"></div>
+
+    <div class="quiz-actions">
+      <button class="btn btn-primary" id="btn-submit" disabled>Submit answer</button>
+      <button class="btn btn-ghost" id="btn-reveal" hidden>Reveal answer</button>
+      <button class="btn btn-ghost" id="btn-skip">Skip →</button>
+    </div>
+
+    <div class="feedback" id="feedback" hidden>
+      <div class="feedback-headline" id="feedback-headline"></div>
+      <div class="feedback-detail" id="feedback-detail"></div>
+      <blockquote class="verse" id="feedback-verse"></blockquote>
+      <button class="btn btn-primary" id="btn-next">Next question →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── HISTORY ─────────── -->
+<section class="view" id="view-history" hidden>
+  <div class="card">
+    <h2>Your journey so far</h2>
+    <p class="lead">Every question you've answered, with the correct answer and the verse. Re-read anytime.</p>
+
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="correct">✔ Correct</button>
+      <button class="filter-btn" data-filter="wrong">✘ Missed</button>
+      <input type="search" id="history-search" placeholder="Search text…" />
+    </div>
+
+    <div id="history-list" class="history-list"></div>
+    <p id="history-empty" class="hint" hidden>You haven't answered any questions yet. Head to the Quiz tab to begin!</p>
+  </div>
+</section>
+
+<!-- ─────────── SETTINGS ─────────── -->
+<section class="view" id="view-settings" hidden>
+  <div class="card">
+    <h2>Settings</h2>
+
+    <div class="settings-section">
+      <h3>Profile</h3>
+      <p>Signed in as <strong id="settings-name">–</strong></p>
+      <button class="btn btn-ghost" id="btn-signout">Sign out (keeps data on this device)</button>
+    </div>
+
+    <div class="settings-section">
+      <h3>Quiz mode</h3>
+      <label class="radio">
+        <input type="radio" name="mode" value="sequential" checked />
+        <span>Sequential — Genesis → Revelation</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="mode" value="shuffle" />
+        <span>Shuffle — random unseen question each time</span>
+      </label>
+    </div>
+
+    <div class="settings-section">
+      <h3>Backup &amp; restore</h3>
+      <p class="hint">Your progress lives in this browser. Download a backup to move it to another device or keep it safe.</p>
+      <div class="cta-row">
+        <button class="btn btn-primary" id="btn-export">⬇ Download my progress</button>
+        <label class="btn btn-ghost">
+          ⬆ Restore from file
+          <input type="file" id="import-file-2" accept=".json" hidden />
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-section danger">
+      <h3>Reset</h3>
+      <p class="hint">This clears every answer you've given, so you can start fresh.</p>
+      <button class="btn btn-danger" id="btn-reset">Reset all my progress</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div>Made with love for the Raja Faith Ministries community — Hyderabad, Telangana.</div>
+  <div class="footer-verse">“So then faith cometh by hearing, and hearing by the word of God.” — Romans 10:17</div>
+</footer>
+
+<script src="assets/app.js" defer></script>
+</body>
+</html>
